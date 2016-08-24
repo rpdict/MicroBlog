@@ -1,1 +1,3 @@
 .\mongod.exe --dbpath F:\Nest\Node.js\micro-blog\data\db
+
+mongod --dbpath=/Users/Apple-NETwork/Nester/Nodejs/MicroBlog/data/db
