@@ -1,15 +1,15 @@
 <%- include header %>
 <p>
-  <% if (user && (user.name == post.name)) { %>
-    <span><a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">编辑</a></span>
-    <span><a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">删除</a></span>
+  <% if (user && (user.name == post.auth)) { %>
+    <span><a class="edit" href="/edit/<%= post.auth %>/<%= post.time.day %>/<%= post.title %>">编辑</a></span>
+    <span><a class="edit" href="/remove/<%= post.auth %>/<%= post.time.day %>/<%= post.title %>">删除</a></span>
   <% } %>
-  <% if (user && (user.name != post.name)) { %>
-    <span><a class="edit" href="/forward/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">转发</a></span>
+  <% if (user && (user.name != post.auth)) { %>
+    <span><a class="edit" href="/forward/<%= post.auth %>/<%= post.time.day %>/<%= post.title %>">转发</a></span>
   <% } %>
 </p>
 <p class="info">
-  作者：<a href="/u/<%= post.name %>"><%= post.name %></a> |
+  作者：<a href="/u/<%= post.auth %>"><%= post.auth %></a> |
   日期：<%= post.time.minute %>
 </p>
 <p><%- post.post %></p>

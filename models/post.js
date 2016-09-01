@@ -23,6 +23,7 @@ Post.prototype.save = function(callback) {
   }
   //要存入数据库的文档
   var post = {
+      auth: this.name,
       name: this.name,
       time: time,
       title: this.title,
@@ -111,6 +112,7 @@ Post.getOne = function(name, day, title, callback) {
         if (err) {
           return callback(err);
         }
+        // console.log(doc);
         //解析 markdown 为 html
         doc.post = markdown.toHTML(doc.post);
         callback(null, doc);//返回查询的一篇文章
@@ -205,6 +207,54 @@ Post.remove = function(name, day, title, callback) {
           return callback(err);
         }
         callback(null);
+      });
+    });
+  });
+};
+
+//转发一篇文章
+Post.forward = function(name, auth, day, title, callback) {
+  var date = new Date();
+  //存储各种时间格式，方便以后扩展
+  var time = {
+      date: date,
+      year : date.getFullYear(),
+      month : date.getFullYear() + "-" + (date.getMonth() + 1),
+      day : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+      minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
+      date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
+  }
+  //打开数据库
+  mongodb.open(function (err, db) {
+    if (err) {
+      return callback(err);
+    }
+    //读取 posts 集合
+    db.collection('posts', function (err, collection) {
+      if (err) {
+        mongodb.close();
+        return callback(err);
+      }
+      //根据用户名、发表日期及文章名进行查询
+      collection.findOne({
+        "auth": auth,
+        "title": title
+      }, function (err, doc) {
+        if (err) {
+          mongodb.close();
+          return callback(err);
+        }
+        // callback(null, doc);//返回查询的一篇文章（markdown 格式）
+        console.log(JSON.parse(doc));
+        collection.insert(doc, {
+          safe: true
+        }, function (err) {
+          mongodb.close();
+          if (err) {
+            return callback(err);//失败！返回 err
+          }
+          callback(null);//返回 err 为 null
+        });
       });
     });
   });
