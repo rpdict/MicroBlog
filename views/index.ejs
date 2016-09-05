@@ -2,7 +2,7 @@
 <% posts.forEach(function (post, index) { %>
   <p><h2><a href="u/<%= post.auth %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h2></p>
   <p class="info">
-    <% if (user && (user.name == post.auth)) { %>
+    <% if (post.name != post.auth) { %>
       由<%= post.name %>转发自<%= post.auth %>
     <% } %>
     作者：<a href="u/<%= post.auth %>"><%= post.auth %></a> |

@@ -245,7 +245,11 @@ Post.forward = function(name, auth, day, title, callback) {
           return callback(err);
         }
         // callback(null, doc);//返回查询的一篇文章（markdown 格式）
-        console.log(JSON.parse(doc));
+        console.log(doc);
+        doc["name"] = name;
+        doc["time"] = time;
+        delete doc["_id"];
+        console.log(doc);
         collection.insert(doc, {
           safe: true
         }, function (err) {
