@@ -92,6 +92,7 @@ Post.getAll = function(name, callback) {
 //获取一篇文章
 Post.getOne = function(name, day, title, callback) {
   //打开数据库
+  console.log(name);
   mongodb.open(function (err, db) {
     if (err) {
       return callback(err);
@@ -104,7 +105,7 @@ Post.getOne = function(name, day, title, callback) {
       }
       //根据用户名、发表日期及文章名进行查询
       collection.findOne({
-        "name": name,
+        "auth": name,
         "time.day": day,
         "title": title
       }, function (err, doc) {
@@ -136,7 +137,7 @@ Post.edit = function(name, day, title, callback) {
       }
       //根据用户名、发表日期及文章名进行查询
       collection.findOne({
-        "name": name,
+        "auth": name,
         "time.day": day,
         "title": title
       }, function (err, doc) {
@@ -165,7 +166,7 @@ Post.update = function(name, day, title, post, callback) {
       }
       //更新文章内容
       collection.update({
-        "name": name,
+        "auth": name,
         "time.day": day,
         "title": title
       }, {
@@ -196,7 +197,7 @@ Post.remove = function(name, day, title, callback) {
       }
       //根据用户名、日期和标题查找并删除一篇文章
       collection.remove({
-        "name": name,
+        "auth": name,
         "time.day": day,
         "title": title
       }, {
@@ -245,11 +246,11 @@ Post.forward = function(name, auth, day, title, callback) {
           return callback(err);
         }
         // callback(null, doc);//返回查询的一篇文章（markdown 格式）
-        console.log(doc);
+        // console.log(doc);
         doc["name"] = name;
         doc["time"] = time;
         delete doc["_id"];
-        console.log(doc);
+        // console.log(doc);
         collection.insert(doc, {
           safe: true
         }, function (err) {
